@@ -1,0 +1,651 @@
+// generator client {
+//   provider = "prisma-client-js"
+// }
+
+// datasource db {
+//   provider = "postgresql"
+//   url      = env("DATABASE_URL")
+// }
+
+// model ReviewReplies {
+//   id        String   @id @default(uuid())
+//   reviewId  String
+//   review    Reviews  @relation(fields: [reviewId], references: [id])
+//   userId    String
+//   user      User     @relation(fields: [userId], references: [id])
+//   reply     String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
+
+// model Reviews {
+//   id        String          @id @default(uuid())
+//   userId    String
+//   user      User            @relation(fields: [userId], references: [id])
+//   courseId  String
+//   course    Course          @relation(fields: [courseId], references: [id])
+//   rating    Float           @default(0)
+//   comment   String
+//   replies   ReviewReplies[]
+//   createdAt DateTime        @default(now())
+//   updatedAt DateTime        @updatedAt
+// }
+
+// model CourseBenefits {
+//   id        String   @id @default(uuid())
+//   title     String
+//   course    Course   @relation(fields: [courseId], references: [id])
+//   courseId  String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
+
+// model CoursePrerequisites {
+//   id        String   @id @default(uuid())
+//   title     String
+//   course    Course   @relation(fields: [courseId], references: [id])
+//   courseId  String
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+// }
+
+// model CourseLinks {
+//   id           String     @id @default(uuid())
+//   contentId    String
+//   course       CourseData @relation(fields: [contentId], references: [id])
+//   title        String
+//   url          String
+//   createdAt    DateTime   @default(now())
+//   updatedAt    DateTime   @updatedAt
+//   courseDataId String?
+// }
+
+// model CourseQuestionAnswers {
+//   id         String          @id @default(uuid())
+//   questionId String
+//   question   CourseQuestions @relation(fields: [questionId], references: [id])
+//   answer     String
+//   userId     String
+//   user       User            @relation(fields: [userId], references: [id])
+//   createdAt  DateTime        @default(now())
+//   updatedAt  DateTime        @updatedAt
+// }
+
+// model CourseQuestions {
+//   id           String                  @id @default(uuid())
+//   userId       String
+//   user         User                    @relation(fields: [userId], references: [id])
+//   contentId    String
+//   content      CourseData              @relation(fields: [contentId], references: [id])
+//   question     String
+//   image        String?
+//   answers      CourseQuestionAnswers[]
+//   createdAt    DateTime                @default(now())
+//   updatedAt    DateTime                @updatedAt
+//   Notification Notification[]
+// }
+
+// model CourseData {
+//   id                   String                 @id @default(uuid())
+//   title                String
+//   videoUrl             String?
+//   videoSection         String?
+//   description          String
+//   videoLength          String
+//   videoPlayer          String?
+//   links                CourseLinks[]
+//   questions            CourseQuestions[]
+//   courseId             String
+//   Course               Course                 @relation(fields: [courseId], references: [id])
+//   VideoCompleteHistory VideoCompleteHistory[]
+// }
+
+// model Course {
+//   id               String                @id @default(uuid())
+//   name             String
+//   description      String
+//   categories       String[]
+//   duration             Float?
+//   price            Float
+//   estimatedPrice   Float?
+//   thumbnail        String
+//   tags             String[]
+//   level            String
+//   demoUrl          String
+//   slug             String                @unique
+//   lessons          Float                 @default(0)
+//   payment_id       String?
+//   benefits         CourseBenefits[]
+//   prerequisites    CoursePrerequisites[]
+//   courseData       CourseData[]
+//   reviews          Reviews[]
+//   orders           Orders[]
+//   iosProductId     String?
+//   androidProductId String?
+//   visibility       Boolean?
+//   ratings          Float                 @default(0)
+//   purchased        Float                 @default(0)
+//   createdAt        DateTime              @default(now())
+//   updatedAt        DateTime              @updatedAt
+//   NumberOfUsersRegisteredForThisCourse Float?
+
+//   userCourses UserCourse[]
+
+
+//   CourseModule CourseModule[]
+// }
+
+
+
+
+
+// enum Role {
+//   User
+//   Admin
+//   Modaretor
+// }
+
+// model Orders {
+//   id           String   @id @default(uuid())
+//   userId       String
+//   user         User     @relation(fields: [userId], references: [id])
+//   payment_info String?
+//   courseId     String
+//   course       Course   @relation(fields: [courseId], references: [id])
+//   createdAt    DateTime @default(now())
+//   updatedAt    DateTime @updatedAt
+// }
+
+// model Notification {
+//   id            String           @id @default(uuid())
+//   title         String
+//   message       String
+//   status        String           @default("Unread")
+//   creatorId     String
+//   receiverId    String?
+//   redirect_link String?
+//   questionId    String?
+//   question      CourseQuestions? @relation(fields: [questionId], references: [id])
+//   ticketId      String?
+//   ticket        Tickets?         @relation(fields: [ticketId], references: [id])
+//   user          User             @relation(fields: [creatorId], references: [id])
+//   createdAt     DateTime         @default(now())
+//   updatedAt     DateTime         @updatedAt
+// }
+
+// model User {
+//   id                   String                  @id @default(uuid())
+//   name                 String
+//   email                String                  @unique
+//   password             String?
+//   phone_number         String?
+//   avatar               String?
+//   stripeCustomerId     String?
+//   githubUserName       String?
+//   pushToken            String?
+//   role                 Role                    @default(User)
+//   verified             Boolean                 @default(false)
+//   reviews              Reviews[]
+//   reviewsReplies       ReviewReplies[]
+//   questions            CourseQuestions[]
+//   questionAnswers      CourseQuestionAnswers[]
+//   orders               Orders[]
+//   Tickets              Tickets[]
+//   TicketReply          TicketReply[]
+//   createdAt            DateTime                @default(now())
+//   updatedAt            DateTime                @updatedAt
+//   Notification         Notification[]
+//   VideoCompleteHistory VideoCompleteHistory[]
+
+//   userCourses UserCourse[]
+
+//   lessonCompletions   LessonCompletion[]
+
+
+
+//   LessonCompletionTrack LessonCompletionTrack[]
+// }
+
+// model UserCourse {
+//   id        String   @id @default(uuid())
+//   userId    String
+//   courseId  String
+//   user      User     @relation(fields: [userId], references: [id])
+//   course    Course   @relation(fields: [courseId], references: [id])
+//   createdAt DateTime @default(now())
+//   updatedAt DateTime @updatedAt
+
+//   @@unique([userId, courseId])
+// }
+
+// model CourseModule {
+//   id            String         @id @default(uuid())
+//   courseId      String
+//   course        Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+//   title         String
+//   description   String?
+//   orderIndex    Int            @default(0)
+//   lessons       CourseLesson[]
+//   createdAt     DateTime       @default(now())
+//   updatedAt     DateTime       @updatedAt
+// }
+
+// model CourseLesson {
+//   id            String                    @id @default(uuid())
+//   moduleId      String
+//   module        CourseModule              @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+//   title         String
+//   description   String?
+//   videoUrl      String?
+//   duration      String?
+//   attachments   CourseLessonAttachment[]
+//   completions   LessonCompletion[]
+//   orderIndex    Int                       @default(0)
+//   createdAt     DateTime                  @default(now())
+//   updatedAt     DateTime                  @updatedAt
+
+//   LessonCompletionTrack LessonCompletionTrack[]
+// }
+
+// model CourseLessonAttachment {
+//   id           String       @id @default(uuid())
+//   lessionId    String
+//   lession      CourseLesson @relation(fields: [lessionId], references: [id], onDelete: Cascade)
+//   title        String
+//   fileUrl      String
+//   fileType     String
+//   createdAt    DateTime     @default(now())
+//   updatedAt    DateTime     @updatedAt
+// }
+
+// model LessonCompletionTrack {
+//   id           String       @id @default(uuid())
+//   userId       String
+//   user         User         @relation(fields: [userId], references: [id])
+//   lessionId    String
+//   lession      CourseLesson @relation(fields: [lessionId], references: [id])
+//   isCompleted  Boolean      @default(false)
+//   completedAt  DateTime?
+//   createdAt    DateTime     @default(now())
+//   updatedAt    DateTime     @updatedAt
+
+//   @@unique([userId, lessionId])
+// }
+
+// model TicketReply {
+//   id        String    @id @default(uuid())
+//   ticketId  String
+//   tickets   Tickets   @relation(fields: [ticketId], references: [id])
+//   reply     String
+//   replyId   String
+//   user      User      @relation(fields: [replyId], references: [id])
+//   createdAt DateTime? @default(now())
+//   updatedAt DateTime? @updatedAt
+// }
+
+// model Tickets {
+//   id           String         @id @default(uuid())
+//   creatorId    String
+//   user         User           @relation(fields: [creatorId], references: [id])
+//   ticketTitle  String
+//   details      String
+//   reply        TicketReply[]
+//   status       String         @default("Pending")
+//   createdAt    DateTime       @default(now())
+//   updatedAt    DateTime       @updatedAt
+//   Notification Notification[]
+// }
+
+// model VideoCompleteHistory {
+//   id        String     @id @default(uuid())
+//   userId    String
+//   user      User       @relation(fields: [userId], references: [id])
+//   contentId String
+//   content   CourseData @relation(fields: [contentId], references: [id])
+//   createdAt DateTime   @default(now())
+//   updatedAt DateTime   @updatedAt
+// }
+
+// model LessonCompletion {
+//   id          String       @id @default(uuid())
+//   userId      String
+//   lessonId    String
+//   isCompleted Boolean      @default(false)
+//   completedAt DateTime?
+//   user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+//   lesson      CourseLesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+//   @@unique([userId, lessonId], name: "unique_user_lesson")
+// }
+
+
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model ReviewReplies {
+  id        String   @id @default(uuid())
+  reviewId  String
+  review    Reviews  @relation(fields: [reviewId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  reply     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Reviews {
+  id        String          @id @default(uuid())
+  userId    String
+  user      User            @relation(fields: [userId], references: [id])
+  courseId  String
+  course    Course          @relation(fields: [courseId], references: [id])
+  rating    Float           @default(0)
+  comment   String
+  replies   ReviewReplies[]
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+}
+
+model CourseBenefits {
+  id        String   @id @default(uuid())
+  title     String
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CoursePrerequisites {
+  id        String   @id @default(uuid())
+  title     String
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CourseLinks {
+  id           String     @id @default(uuid())
+  contentId    String
+  courseDataId String?
+  course       CourseData @relation(fields: [contentId], references: [id])
+  title        String
+  url          String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model CourseQuestionAnswers {
+  id         String          @id @default(uuid())
+  questionId String
+  question   CourseQuestions @relation(fields: [questionId], references: [id])
+  answer     String
+  userId     String
+  user       User            @relation(fields: [userId], references: [id])
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+}
+
+
+
+model CourseData {
+  id                   String                 @id @default(uuid())
+  title                String
+  videoUrl             String?
+  videoSection         String?
+  description          String
+  videoLength          String
+  videoPlayer          String?
+  courseId             String
+  Course               Course                 @relation(fields: [courseId], references: [id])
+  links                CourseLinks[]
+  questions            CourseQuestions[]
+  VideoCompleteHistory VideoCompleteHistory[]
+}
+
+model Course {
+  id               String                @id @default(uuid())
+  name             String
+  description      String
+  categories       String[]
+  duration         Float?
+  price            Float
+  estimatedPrice   Float?
+  thumbnail        String
+  tags             String[]
+  level            String
+  demoUrl          String
+  slug             String                @unique
+  lessons          Float                 @default(0)
+  payment_id       String?
+  visibility       Boolean?              @default(false)
+  ratings          Float                 @default(0)
+  purchased        Float                 @default(0)
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+  iosProductId     String?
+  androidProductId String?
+  NumberOfUsersRegisteredForThisCourse Float?
+  benefits         CourseBenefits[]
+  prerequisites    CoursePrerequisites[]
+  courseData       CourseData[]
+  reviews          Reviews[]
+  orders           Orders[]
+  userCourses      UserCourse[]
+  CourseModule     CourseModule[]
+  questions        CourseQuestions[]
+  resources        CourseResources[]
+}
+
+   model CourseQuestions {
+     id        String                  @id @default(uuid())
+     courseId  String
+     course    Course                  @relation(fields: [courseId], references: [id])
+     question  String
+     answer    String
+     createdAt DateTime                @default(now())
+     updatedAt DateTime                @updatedAt
+
+     users     User[]                  @relation("UserQuestions")
+     Notification Notification[]       @relation("CourseQuestionsToNotification")
+   
+     CourseQuestionAnswers CourseQuestionAnswers[]
+
+     CourseData CourseData[]
+}
+
+model CourseResources {
+  id        String   @id @default(uuid())
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id])
+  title     String
+  url       String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  User
+  Admin
+  Moderator
+}
+
+model Orders {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id])
+  payment_info String?
+  courseId     String
+  course       Course   @relation(fields: [courseId], references: [id])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Notification {
+  id            String           @id @default(uuid())
+  title         String
+  message       String
+  status        NotificationStatus @default(UNREAD)
+  creatorId     String
+  receiverId    String?
+  redirect_link String?
+  questionId    String?
+  question      CourseQuestions? @relation(fields: [questionId], references: [id], name: "CourseQuestionsToNotification")
+  ticketId      String?
+  ticket        Tickets?         @relation(fields: [ticketId], references: [id])
+  user          User             @relation(fields: [creatorId], references: [id])
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+}
+
+enum NotificationStatus {
+  UNREAD
+  READ
+}
+
+model User {
+  id                   String                  @id @default(uuid())
+  name                 String
+  email                String                  @unique
+  password             String?
+  phone_number         String?
+  avatar               String?
+  stripeCustomerId     String?
+  githubUserName       String?
+  pushToken            String?
+  role                 Role                    @default(User)
+  verified             Boolean                 @default(false)
+  reviews              Reviews[]
+  reviewsReplies       ReviewReplies[]
+  questions            CourseQuestions[]       @relation("UserQuestions")
+  questionAnswers      CourseQuestionAnswers[]
+  orders               Orders[]
+  Tickets              Tickets[]
+  TicketReply          TicketReply[]
+  Notification         Notification[]
+  VideoCompleteHistory VideoCompleteHistory[]
+  userCourses          UserCourse[]
+  lessonCompletions    LessonCompletion[]
+  LessonCompletionTrack LessonCompletionTrack[]
+  createdAt            DateTime                @default(now())
+  updatedAt            DateTime                @updatedAt
+}
+
+model UserCourse {
+  id        String   @id @default(uuid())
+  userId    String
+  courseId  String
+  user      User     @relation(fields: [userId], references: [id])
+  course    Course   @relation(fields: [courseId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, courseId])
+}
+
+model CourseModule {
+  id            String         @id @default(uuid())
+  courseId      String
+  course        Course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  title         String
+  description   String?
+  orderIndex    Int            @default(0)
+  lessons       CourseLesson[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+model CourseLesson {
+  id                    String                  @id @default(uuid())
+  moduleId              String
+  module                CourseModule            @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  title                 String
+  description           String?
+  videoUrl              String?
+  duration              String?
+  orderIndex            Int                     @default(0)
+  completions           LessonCompletion[]
+  LessonCompletionTrack LessonCompletionTrack[]
+  attachments           CourseLessonAttachment[]
+  createdAt             DateTime                @default(now())
+  updatedAt             DateTime                @updatedAt
+}
+
+model CourseLessonAttachment {
+  id           String       @id @default(uuid())
+  lessonId     String
+  lesson       CourseLesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  title        String
+  fileUrl      String
+  fileType     String
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
+
+model LessonCompletionTrack {
+  id           String       @id @default(uuid())
+  userId       String
+  user         User         @relation(fields: [userId], references: [id])
+  lessionId    String
+  lession      CourseLesson @relation(fields: [lessionId], references: [id])
+  isCompleted  Boolean      @default(false)
+  completedAt  DateTime?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@unique([userId, lessionId]) // Ensures a user can only have one track per lesson
+}
+
+model TicketReply {
+  id        String    @id @default(uuid())
+  ticketId  String
+  tickets   Tickets   @relation(fields: [ticketId], references: [id])
+  reply     String
+  replyId   String
+  user      User      @relation(fields: [replyId], references: [id])
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
+}
+
+model Tickets {
+  id           String         @id @default(uuid())
+  creatorId    String
+  user         User           @relation(fields: [creatorId], references: [id])
+  ticketTitle  String
+  details      String
+  reply        TicketReply[]
+  status       String         @default("Pending")
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  Notification Notification[]
+}
+
+model VideoCompleteHistory {
+  id        String     @id @default(uuid())
+  userId    String
+  user      User       @relation(fields: [userId], references: [id])
+  contentId String
+  content   CourseData @relation(fields: [contentId], references: [id])
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model LessonCompletion {
+  id          String       @id @default(uuid())
+  userId      String
+  lessonId    String
+  isCompleted Boolean      @default(false)
+  completedAt DateTime?
+  user        User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson      CourseLesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId], name: "unique_user_lesson")
+}
